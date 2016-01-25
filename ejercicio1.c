@@ -95,14 +95,7 @@ int main(int argc, char* argv[]) {
   return 0;
 } /* main */
 
-void e(int error) {
-  if(error != MPI_SUCCESS) {
-    fprintf(stderr,"Error starting MPI program, Terminating.\n");
-    MPI_Abort(MPI_COMM_WORLD,error);
-    MPI_Finalize();
-    exit(1);
-  }
-}
+
 
 /* Print out the histogram */
 void Print_histo(
@@ -202,7 +195,7 @@ void Gen_data(
       data[i] = (float) rand() / (float) RAND_MAX * range + min_meas;
     }
   }
-  e(MPI_Scatter(data,local_data_count,MPI_FLOAT,local_data,local_data_count,MPI_FLOAT, 0, comm));
+  MPI_Scatter(data,local_data_count,MPI_FLOAT,local_data,local_data_count,MPI_FLOAT, 0, comm);
   if(my_rank == 0) free(data);
 }  /* Gen_data */
 
@@ -240,7 +233,7 @@ void Get_input(
   }
   MPI_Bcast(bin_count_p,1,MPI_INT,0,comm);
   MPI_Bcast(min_meas_p,1,MPI_FLOAT,0,comm);
-  MPI_Bcast(max_meas_p,1,MPI_FLOAT,0,comm));
-  MPI_Bcast(data_count_p,1,MPI_INT,0,comm));
+  MPI_Bcast(max_meas_p,1,MPI_FLOAT,0,comm);
+  MPI_Bcast(data_count_p,1,MPI_INT,0,comm);
   MPI_Bcast(local_data_count_p,1,MPI_INT,0,comm);
 }  /* Get_input */
